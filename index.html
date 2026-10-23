@@ -1,12 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nazarbek's Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nazarbek – Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff4a1c;--ink:#151515;--paper:#e8e8e6;--white:#fafafa;--mute:#6d6d6a}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+.mono{font-family:"Space Mono",ui-monospace,Menlo,monospace;font-size:.78rem}
+section{padding:clamp(48px,8vw,110px) clamp(20px,5vw,64px)}
+nav{display:flex;justify-content:space-between;padding:20px clamp(20px,5vw,64px);border-bottom:1px solid var(--ink)}
+nav a{color:inherit;text-decoration:none;margin-left:22px}
+nav a:hover{color:var(--red)}
+/* hero */
+.hero{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;gap:48px}
+.hero h1{font-stretch:62%;font-weight:900;font-size:clamp(4rem,17vw,15rem);line-height:.86;letter-spacing:-.02em;text-transform:uppercase}
+.hero h1 .hi{display:block;color:var(--red)}
+.hero .row{display:flex;justify-content:space-between;gap:32px;align-items:end;flex-wrap:wrap}
+.hero p{max-width:34ch;font-size:1.15rem}
+.hero .scroll{border:1px solid var(--ink);padding:10px 18px;text-decoration:none;color:inherit}
+.hero .scroll:hover{background:var(--ink);color:var(--paper)}
+/* slider */
+.work{background:var(--ink);color:var(--white);overflow:hidden}
+.work h2,.about h2{font-stretch:62%;font-weight:900;font-size:clamp(2.5rem,8vw,6rem);line-height:.9;text-transform:uppercase}
+.work header{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.stage{position:relative;height:clamp(340px,52vw,520px);perspective:1500px;margin-top:40px;touch-action:pan-y;cursor:grab;user-select:none}
+.stage:active{cursor:grabbing}
+.card{position:absolute;left:50%;top:50%;width:min(76vw,560px);aspect-ratio:16/10;margin-top:calc(min(76vw,560px)*-.31);padding:22px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .6s;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+.card.red{background:var(--red);color:var(--white)}
+.card.dark{background:#242424;color:var(--white);outline:1px solid #444}
+.card.light{background:var(--white);color:var(--ink)}
+.card .top{display:flex;justify-content:space-between}
+.card h3{font-stretch:62%;font-weight:900;font-size:clamp(2rem,6vw,4.2rem);line-height:.9;text-transform:uppercase}
+.card .big{position:absolute;right:18px;bottom:-14px;font-stretch:62%;font-weight:900;font-size:clamp(5rem,14vw,10rem);opacity:.14;line-height:1}
+.ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.ctrl button,.bar button,.close{font:inherit;background:none;color:inherit;border:1px solid currentColor;padding:10px 20px;cursor:pointer}
+.ctrl button:hover,.bar button:hover{background:var(--red);border-color:var(--red);color:var(--white)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,10,10,.8);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}
+.sheet{width:min(860px,100%);max-height:90vh;overflow:auto;padding:clamp(22px,4vw,44px);display:flex;flex-direction:column;gap:22px;animation:pop .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes pop{from{transform:scale(.92) rotate(-1.5deg);opacity:0}}
+.sheet.red{background:var(--red);color:var(--white)}
+.sheet.dark{background:#242424;color:var(--white)}
+.sheet.light{background:var(--white);color:var(--ink)}
+.sheet .top{display:flex;justify-content:space-between;gap:16px}
+.sheet h3{font-stretch:62%;font-weight:900;font-size:clamp(2.4rem,8vw,5rem);line-height:.9;text-transform:uppercase}
+.sheet .txt{font-size:1.15rem;max-width:60ch;white-space:pre-wrap}
+/* about / contact */
+.about{display:grid;gap:40px;grid-template-columns:1fr}
+@media(min-width:800px){.about{grid-template-columns:1fr 1.3fr}}
+.about p{font-size:1.25rem;max-width:52ch}
+.about a{color:var(--red);font-weight:700}
+footer{padding:20px clamp(20px,5vw,64px);border-top:1px solid var(--ink);display:flex;justify-content:space-between}
+/* edit mode */
+.bar{display:none;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:80;background:var(--ink);color:var(--white);padding:10px;gap:8px;border:1px solid var(--red)}
+.edit .bar{display:flex}
+.edit [contenteditable]{outline:1px dashed var(--red);outline-offset:4px;cursor:text}
+.editonly{display:none}
+.edit .editonly{display:inline-block}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <h1>Hi, I'm Nazarbek</h1>
-  <p>I'm a 10th-grade student interested in English, math, web development and AI.</p>
+
+<nav class="mono">
+  <span data-k="name">Nazarbek</span>
+  <span><a href="#work">Achievements</a><a href="#about">About</a><a href="#contact">Contact</a></span>
+</nav>
+
+<section class="hero">
+  <h1><span class="hi">Hi,</span>I’m <span data-k="name">Nazarbek</span></h1>
+  <div class="row">
+    <p data-k="tagline"></p>
+    <a class="scroll mono" href="#work">Scroll down to my work</a>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <header>
+    <h2>Achievements</h2>
+    <span class="mono" id="count"></span>
+  </header>
+  <div class="stage" id="stage" aria-label="Achievements slider"></div>
+  <div class="ctrl">
+    <button id="prev" aria-label="Previous">Prev</button>
+    <span class="mono">Drag, swipe or click a card to open it</span>
+    <button id="next" aria-label="Next">Next</button>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <h2>About me</h2>
+  <p data-k="about"></p>
+</section>
+
+<section class="about" id="contact" style="background:var(--red);color:var(--white)">
+  <h2>Contact</h2>
+  <p>Write to me: <a style="color:inherit" id="mail" href="#"><span data-k="email"></span></a></p>
+</section>
+
+<footer class="mono"><span>© <span data-k="name">Nazarbek</span></span><span>Built with GitHub Pages</span></footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="sheet" id="sheet">
+    <div class="top mono"><span data-ik="tag"></span><span data-ik="year"></span></div>
+    <h3 data-ik="title"></h3>
+    <p class="txt" data-ik="text"></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="close" id="close">Close</button>
+      <button class="close editonly" id="theme">Change color</button>
+      <button class="close editonly" id="del">Delete card</button>
+    </div>
+  </div>
+</div>
+
+<div class="bar mono">
+  <button id="add">+ Add card</button>
+  <button id="copy">Copy my content</button>
+  <button id="reset">Reset</button>
+</div>
+
+<script>
+/* ============================================================
+   YOUR CONTENT. Edit the text between the quotes below.
+   (Or open the site with #edit at the end of the address
+   and type directly on the page, see the instructions.)
+   theme can be: "red", "dark" or "light"
+   ============================================================ */
+const DEFAULT = {
+  name: "Nazarbek",
+  tagline: "10th-grade student from Tashkent. I like English, math, building websites and AI.",
+  about: "Write 3-4 sentences here: who you are, what you are learning, and which university subject you want to study and why.",
+  email: "your-email@example.com",
+  items: [
+    {tag:"Project", year:"2026", title:"This website", theme:"red",
+     text:"My first portfolio, built from scratch on GitHub Pages. I will keep adding projects and results here."},
+    {tag:"Exam", year:"2027", title:"SAT: in progress", theme:"dark",
+     text:"Preparing for the SAT in English and Math. Target score: write yours here. Add the real result when you have it."},
+    {tag:"Exam", year:"2027", title:"IELTS: in progress", theme:"light",
+     text:"Preparing for IELTS. Replace this text with your score and date when you pass."},
+    {tag:"Project", year:"2026", title:"AI study helper", theme:"red",
+     text:"Idea: a free tool that explains SAT and IELTS mistakes step by step. Describe what you built, who used it and the results."},
+    {tag:"Goal", year:"2026", title:"First olympiad", theme:"dark",
+     text:"Add any competition, course or volunteering here. Write what you did and what changed because of it."}
+  ]
+};
+/* ============================================================ */
+
+const EDIT = location.hash === "#edit";
+let C = JSON.parse(JSON.stringify(DEFAULT)), cur = 0, openI = -1;
+if (EDIT) { try { const s = localStorage.getItem("pf"); if (s) C = JSON.parse(s); } catch (e) {} document.body.classList.add("edit"); }
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const save = () => { if (EDIT) try { localStorage.setItem("pf", JSON.stringify(C)); } catch (e) {} };
+
+function statics() {
+  document.querySelectorAll("[data-k]").forEach(el => {
+    if (document.activeElement !== el) el.textContent = C[el.dataset.k];
+    if (EDIT) el.setAttribute("contenteditable", "plaintext-only");
+  });
+  $("#mail").href = "mailto:" + C.email;
+}
+document.addEventListener("input", e => {
+  const k = e.target.dataset && e.target.dataset.k, ik = e.target.dataset && e.target.dataset.ik;
+  if (k) { C[k] = e.target.textContent; document.querySelectorAll('[data-k="' + k + '"]').forEach(el => { if (el !== e.target) el.textContent = C[k]; }); $("#mail").href = "mailto:" + C.email; save(); }
+  if (ik && openI > -1) { C.items[openI][ik] = e.target.textContent; save(); cards(); }
+});
+
+function cards() {
+  $("#stage").innerHTML = C.items.map((it, i) =>
+    `<article class="card ${it.theme}" data-i="${i}"><div class="top mono"><span>${esc(it.tag)}</span><span>${esc(it.year)}</span></div><div class="big">${String(i + 1).padStart(2, "0")}</div><h3>${esc(it.title)}</h3></article>`).join("");
+  place();
+}
+function place() {
+  const n = C.items.length;
+  if (cur >= n) cur = Math.max(0, n - 1);
+  document.querySelectorAll(".card").forEach((el, i) => {
+    let d = i - cur; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
+    const a = Math.abs(d);
+    el.style.transform = `translateX(${-50 + d * 62}%) translateZ(${-a * 160}px) rotateY(${-d * 28}deg) rotateZ(${d * 1.5}deg)`;
+    el.style.opacity = a > 2 ? 0 : 1 - a * .22;
+    el.style.zIndex = 10 - a;
+    el.style.pointerEvents = a > 2 ? "none" : "auto";
+  });
+  $("#count").textContent = n ? (cur + 1) + " / " + n : "No cards yet";
+}
+const step = d => { const n = C.items.length; if (n) { cur = (cur + d + n) % n; place(); } };
+$("#prev").onclick = () => step(-1);
+$("#next").onclick = () => step(1);
+
+let sx = null, moved = false;
+const st = $("#stage");
+st.addEventListener("pointerdown", e => { sx = e.clientX; moved = false; });
+window.addEventListener("pointerup", e => { if (sx === null) return; const dx = e.clientX - sx; if (Math.abs(dx) > 50) { moved = true; step(dx < 0 ? 1 : -1); } sx = null; });
+st.addEventListener("click", e => {
+  if (moved) { moved = false; return; }
+  const c = e.target.closest(".card"); if (!c) return;
+  const i = +c.dataset.i;
+  if (i === cur) openCard(i); else { cur = i; place(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeCard();
+  if (!$("#modal").classList.contains("open") && !e.target.isContentEditable) { if (e.key === "ArrowLeft") step(-1); if (e.key === "ArrowRight") step(1); }
+});
+
+function openCard(i) {
+  openI = i; const it = C.items[i];
+  $("#sheet").className = "sheet " + it.theme;
+  document.querySelectorAll("[data-ik]").forEach(el => { el.textContent = it[el.dataset.ik]; if (EDIT) el.setAttribute("contenteditable", "plaintext-only"); });
+  $("#modal").classList.add("open"); $("#close").focus();
+}
+function closeCard() { $("#modal").classList.remove("open"); openI = -1; }
+$("#close").onclick = closeCard;
+$("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeCard(); });
+$("#theme").onclick = () => { const t = ["red", "dark", "light"], it = C.items[openI]; it.theme = t[(t.indexOf(it.theme) + 1) % 3]; $("#sheet").className = "sheet " + it.theme; save(); cards(); };
+$("#del").onclick = () => { if (confirm("Delete this card?")) { C.items.splice(openI, 1); closeCard(); save(); cards(); } };
+$("#add").onclick = () => { C.items.push({tag:"Project", year:"2026", title:"New card", theme:"red", text:"Click to write what you did."}); cur = C.items.length - 1; save(); cards(); openCard(cur); };
+$("#copy").onclick = () => { navigator.clipboard.writeText("const DEFAULT = " + JSON.stringify(C, null, 2) + ";").then(() => alert("Copied. Now paste it over the old 'const DEFAULT = ...;' block in index.html on GitHub.")); };
+$("#reset").onclick = () => { if (confirm("Delete all your edits made in this browser?")) { localStorage.removeItem("pf"); location.reload(); } };
+
+statics(); cards();
+</script>
 </body>
 </html>
